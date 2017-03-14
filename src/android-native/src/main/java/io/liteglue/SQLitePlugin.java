@@ -437,7 +437,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
 
             FLog.v(TAG, "Copied pre-populated DB content to: " + newDbFile.getAbsolutePath());
         } catch (IOException ex) {
-            FLog.v(TAG, "No pre-populated DB found, error=" + ex.getMessage());
+            FLog.e(TAG, "No pre-populated DB found, error=", ex);
         } finally {
             if (out != null) {
                 try {
@@ -639,9 +639,8 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
                         }
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                     errorMessage = ex.getMessage();
-                    FLog.v(TAG, "SQLitePlugin.executeSql[Batch](): Error=" + errorMessage);
+                    FLog.e(TAG, "SQLitePlugin.executeSql[Batch]() failed", ex);
                 }
 
                 try {
@@ -665,9 +664,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
                         batchResults.put(r);
                     }
                 } catch (JSONException ex) {
-                    ex.printStackTrace();
-                    FLog.v(TAG, "SQLitePlugin.executeSql[Batch](): Error=" + ex.getMessage());
-                    // TODO what to do?
+                    FLog.e(TAG, "SQLitePlugin.executeSql[Batch]() failed", ex);
                 }
             }
 
@@ -705,11 +702,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
 
                     hasRows = myStatement.step();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
-                    String errorMessage = ex.getMessage();
-                    FLog.v(TAG, "SQLitePlugin.executeSql[Batch](): Error=" + errorMessage);
-
-
+                    FLog.e(TAG, "SQLitePlugin.executeSql[Batch]() failed", ex);
                     throw ex;
                 }
 
@@ -792,14 +785,14 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
                 }
 
             } catch (JSONException ex){
-                FLog.v(TAG,"Error retrieving assetFilename from options:",ex);
+                FLog.e(TAG,"Error retrieving assetFilename from options.", ex);
             }
             this.openFlags = openFlags;
             this.oldImpl = options.has("androidOldDatabaseImplementation");
             FLog.v(TAG, "Android db implementation: " + (oldImpl ? "OLD" : "sqlite4java (NDK)"));
             this.bugWorkaround = this.oldImpl && options.has("androidBugWorkaround");
             if (this.bugWorkaround)
-                FLog.v(TAG, "Android db closing/locking workaround applied");
+                FLog.i(TAG, "Android db closing/locking workaround applied");
 
             this.q = new LinkedBlockingQueue<>();
             this.openCbc = cbc;
