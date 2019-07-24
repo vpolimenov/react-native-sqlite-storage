@@ -6,6 +6,6 @@ target 'SQLite' do
   # use_frameworks!
 
   # Pods for SQLite
-  pod 'SQLCipher'
+  pod 'SQLCipher', '~> 3.x'
 
 end
