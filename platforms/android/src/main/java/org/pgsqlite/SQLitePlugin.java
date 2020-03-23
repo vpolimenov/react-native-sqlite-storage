@@ -215,6 +215,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
 
     private boolean executeAndPossiblyThrow(Action action, ReadableMap args, CallbackContext cbc){
         String dbname;
+        String password;
 
         switch (action) {
             case echoStringValue:
@@ -224,7 +225,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
 
             case open:
                 dbname = SQLitePluginConverter.getString(args,"name","");
-                password = SQLitePluginConverter.getString(args,"key",null);
+                password = SQLitePluginConverter.getString(args,"key","");
 
                 // open database and start reading its queue
                 this.startDatabase(dbname, password, args, cbc);
@@ -929,7 +930,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
             } catch (Exception e) {
                 FLog.e(TAG, "unexpected error, stopping db thread", e);
                 if (openCbc != null) {
-                    openCbc.error("Can't open database." + ex);
+                    openCbc.error("Can't open database." + e);
                 }
                 dbrmap.remove(dbname);
                 return;
